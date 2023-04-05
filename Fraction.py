@@ -17,7 +17,7 @@ class Fraction:
                 temp = denom * multiplicateur
             num = num * multiplicateur
             denom = int(denom * multiplicateur)
-        self.plus_grand_diviseur_commun = Fraction.get_pgdc(num,denom)          # permet de simplifier la fraction
+        self.plus_grand_diviseur_commun = Fraction.get_pgdc(num = num, denom = denom)          # permet de simplifier la fraction
         self.__num = num // self.plus_grand_diviseur_commun
         self.__denom = denom // self.plus_grand_diviseur_commun
 
@@ -29,29 +29,29 @@ class Fraction:
     def __str__(self) -> str:
         return f"({self.__num}/{self.__denom})"
     
-    def __eq__(self, other : 'Fraction') -> bool:
-        if isinstance(other, Fraction):
-            return self.__num == other.__num and self.__denom == other.__denom
-        elif isinstance(other, int) or isinstance(other, float):
-            return self.__eq__(Fraction(other))
+    def __eq__(self, autre : 'Fraction') -> bool:
+        if isinstance(autre, Fraction):
+            return self.__num == autre.__num and self.__denom == autre.__denom
+        elif isinstance(autre, int) or isinstance(autre, float):
+            return self.__eq__(Fraction(autre))
         else:
-            return NotImplemented
+            raise TypeError(f"{type(autre)} n'est pas supporté")
     
-    def __lt__(self, other: 'Fraction') -> bool:
-        if isinstance(other, Fraction):
-            return self.__num * other.__denom < other.__num * self.__denom
-        elif isinstance(other, int) or isinstance(other, float):
-            return self.__lt__(Fraction(other))
+    def __lt__(self, autre: 'Fraction') -> bool:
+        if isinstance(autre, Fraction):
+            return self.__num * autre.__denom < autre.__num * self.__denom
+        elif isinstance(autre, int) or isinstance(autre, float):
+            return self.__lt__(Fraction(autre))
         else:
-            return NotImplemented
+           raise TypeError(f"{type(autre)} n'est pas supporté")
     
-    def __gt__(self, other: 'Fraction') -> bool:
-        if isinstance(other, Fraction):
-            return self.__num * other.__denom > other.__num * self.__denom
-        elif isinstance(other, int) or isinstance(other, float):
-            return self.__gt__(Fraction(other))
+    def __gt__(self, autre: 'Fraction') -> bool:
+        if isinstance(autre, Fraction):
+            return self.__num * autre.__denom > autre.__num * self.__denom
+        elif isinstance(autre, int) or isinstance(autre, float):
+            return self.__gt__(Fraction(autre))
         else:
-            return NotImplemented
+            raise TypeError(f"{type(autre)} n'est pas supporté")
     
     def __int__(self) -> int:
         return self.__num // self.__denom
@@ -108,14 +108,18 @@ class Fraction:
             raise TypeError(f"La puissance doit être un entier, pas un {type(autre)}")
             
     @staticmethod
-    def get_pgdc(num : int, denom : int) -> int:
-        if num == 0 or denom == 0:
-            return num
-        if num<0 or denom<0:
-            return Fraction.get_pgdc(abs(num),abs(denom))
-        if denom != 0:
-            return Fraction.get_pgdc(denom,num % denom)
-        
+    def get_pgdc(frac :'Fraction' = None, num : int = None, denom : int = None) -> int:
+        if isinstance(num, int) and isinstance(denom, int):
+            if num == 0 or denom == 0:
+                return num
+            if num<0 or denom<0:
+                return Fraction.get_pgdc(num = abs(num),denom = abs(denom))
+            if denom != 0:
+                return Fraction.get_pgdc(num = denom, denom = num % denom)
+        if isinstance(frac, Fraction):
+            return Fraction.get_pgdc(num = frac.__num,denom = frac.__denom)
+        raise TypeError("Invalid type for the get_pgdc arguments")
+
     def to_decimal(self) -> float:
         return self.__num / self.__denom
 
@@ -136,5 +140,4 @@ class Fraction:
     
     def get_denom(self) -> int:
         return self.__denom
-
 
