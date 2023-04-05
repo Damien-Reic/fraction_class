@@ -17,8 +17,6 @@ class Fraction:
                 temp = denom * multiplicateur
             num = num * multiplicateur
             denom = int(denom * multiplicateur)
-
-
         self.plus_grand_diviseur_commun = Fraction.get_pgdc(num,denom)          # permet de simplifier la fraction
         self.__num = num // self.plus_grand_diviseur_commun
         self.__denom = denom // self.plus_grand_diviseur_commun
