@@ -1,10 +1,30 @@
 class Fraction:
-    def __init__(self,num : int,denom : int = 1) -> 'Fraction':
+    def __init__(self,num : int or float,denom : int or float = 1) -> 'Fraction':
         if denom < 0:
-            num,denom = -num,-denom
-        self.plus_grand_diviseur_commun = Fraction.get_pgdc(num,denom)
+            num,denom = -num,-denom         # s'assure que le négatif est toujours sur au numérateur 
+        if isinstance(num, float):          # fait en sorte de prendre en charge les floats
+            is_int = lambda x: int(x) == x
+            multiplicateur = 2
+            temp = num
+            while not is_int(temp):
+                temp = num * multiplicateur
+            num = int(num * multiplicateur)
+            denom = denom * multiplicateur
+        if isinstance(denom, float):
+            is_int = lambda x: int(x) == x
+            multiplicateur = 2
+            temp = denom
+            while not is_int(temp):
+                temp = denom * multiplicateur
+            num = num * multiplicateur
+            denom = int(denom * multiplicateur)
+
+
+        self.plus_grand_diviseur_commun = Fraction.get_pgdc(num,denom)          # permet de simplifier la fraction
         self.__num = num // self.plus_grand_diviseur_commun
         self.__denom = denom // self.plus_grand_diviseur_commun
+
+
 
     def __repr__(self) -> str:
         return f"Fraction({self.__num},{self.__denom})"
@@ -51,8 +71,8 @@ class Fraction:
     def __add__(self,autre) -> 'Fraction': 
         if isinstance(autre,Fraction):
             return Fraction((self.__num*autre.__denom)+(autre.__num * self.__denom),self.__denom*autre.__denom)
-        elif isinstance(autre,int):
-            return Fraction((self.__num*autre)+(autre * self.__denom),self.__denom*autre)
+        elif isinstance(autre, int) or isinstance(autre, float):
+            return self.__add__(Fraction(autre))
         else:
             raise TypeError(f"{type(autre)} n'est pas supporté")
 
@@ -60,24 +80,24 @@ class Fraction:
     def __sub__(self, autre) -> 'Fraction': 
         if isinstance(autre, Fraction):
             return Fraction((self.__num * autre.__denom) - (autre.__num * self.__denom), self.__denom * autre.__denom)
-        elif isinstance(autre, int):
-            return Fraction((self.__num - (autre * self.__denom)), self.__denom)
+        elif isinstance(autre, int) or isinstance(autre, float):
+            return self.__sub__(Fraction(autre))
         else:
             raise TypeError(f"{type(autre)} n'est pas supporté")
 
     def __mul__(self, autre) -> 'Fraction': 
         if isinstance(autre, Fraction):
             return Fraction(self.__num * autre.__num, self.__denom * autre.__denom)
-        elif isinstance(autre, int):
-            return Fraction(self.__num * autre, self.__denom)
+        elif isinstance(autre, int) or isinstance(autre, float):
+            return self.__mul__(Fraction(autre))
         else:
             raise TypeError(f"{type(autre)} n'est pas supporté")
 
     def __truediv__(self, autre) -> 'Fraction': 
         if isinstance(autre, Fraction):
             return self.__mul__(Fraction(autre.__denom, autre.__num))
-        elif isinstance(autre, int):
-            return Fraction(self.__num, self.__denom * autre)
+        elif isinstance(autre, int) or isinstance(autre, float):
+            return self.__truediv__(Fraction(autre))
         else:
             raise TypeError(f"{type(autre)} n'est pas supporté")
         
@@ -119,3 +139,4 @@ class Fraction:
     
     def get_denom(self) -> int:
         return self.__denom
+
