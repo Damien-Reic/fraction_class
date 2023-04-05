@@ -31,27 +31,27 @@ class Fraction:
     def __str__(self) -> str:
         return f"({self.__num}/{self.__denom})"
     
-    def __eq__(self, other : 'Fraction', int) -> bool:
+    def __eq__(self, other : 'Fraction') -> bool:
         if isinstance(other, Fraction):
             return self.__num == other.__num and self.__denom == other.__denom
-        elif isinstance(other, int):
-            return self.__num == other and self.__denom == 1
+        elif isinstance(other, int) or isinstance(other, float):
+            return self.__eq__(Fraction(other))
         else:
             return NotImplemented
     
-    def __lt__(self, other: 'Fraction', int) -> bool:
+    def __lt__(self, other: 'Fraction') -> bool:
         if isinstance(other, Fraction):
             return self.__num * other.__denom < other.__num * self.__denom
-        elif isinstance(other, int):
-            return self.__num < other * self.__denom
+        elif isinstance(other, int) or isinstance(other, float):
+            return self.__lt__(Fraction(other))
         else:
             return NotImplemented
     
-    def __gt__(self, other: 'Fraction', int) -> bool:
+    def __gt__(self, other: 'Fraction') -> bool:
         if isinstance(other, Fraction):
             return self.__num * other.__denom > other.__num * self.__denom
-        elif isinstance(other, int):
-            return self.__num > other * self.__denom
+        elif isinstance(other, int) or isinstance(other, float):
+            return self.__gt__(Fraction(other))
         else:
             return NotImplemented
     
@@ -99,7 +99,7 @@ class Fraction:
             return self.__truediv__(Fraction(autre))
         else:
             raise TypeError(f"{type(autre)} n'est pas supporté")
-        
+
     def __pow__(self, autre : int) -> 'Fraction':
         if isinstance(autre, int):
             if autre < 0:
@@ -138,4 +138,5 @@ class Fraction:
     
     def get_denom(self) -> int:
         return self.__denom
+
 
