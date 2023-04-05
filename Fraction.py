@@ -2,8 +2,8 @@ class Fraction:
     def __init__(self,num : int or float,denom : int or float = 1) -> 'Fraction':
         if denom < 0:
             num,denom = -num,-denom         # s'assure que le négatif est toujours sur au numérateur 
+        is_int = lambda x: int(x) == x
         if isinstance(num, float):          # fait en sorte de prendre en charge les floats
-            is_int = lambda x: int(x) == x
             multiplicateur = 2
             temp = num
             while not is_int(temp):
@@ -11,7 +11,6 @@ class Fraction:
             num = int(num * multiplicateur)
             denom = denom * multiplicateur
         if isinstance(denom, float):
-            is_int = lambda x: int(x) == x
             multiplicateur = 2
             temp = denom
             while not is_int(temp):
