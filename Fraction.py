@@ -2,24 +2,26 @@ class Fraction:
     def __init__(self,num : int or float,denom : int or float = 1) -> 'Fraction':
         if denom < 0:
             num,denom = -num,-denom         # s'assure que le négatif est toujours sur au numérateur 
-        is_int = lambda x: int(x) == x
+        is_almost_int = lambda x: int(x) == round(x,3)
         if isinstance(num, float):          # fait en sorte de prendre en charge les floats
             multiplicateur = 2
             temp = num
-            while not is_int(temp):
+            while not is_almost_int(temp):
+                multiplicateur += 1
                 temp = num * multiplicateur
             num = int(num * multiplicateur)
             denom = denom * multiplicateur
         if isinstance(denom, float):
             multiplicateur = 2
             temp = denom
-            while not is_int(temp):
+            while not is_almost_int(temp):
+                multiplicateur += 1
                 temp = denom * multiplicateur
-            num = num * multiplicateur
             denom = int(denom * multiplicateur)
+            num = num * multiplicateur
         self.plus_grand_diviseur_commun = Fraction.get_pgdc(num = num, denom = denom)          # permet de simplifier la fraction
-        self.__num = num // self.plus_grand_diviseur_commun
-        self.__denom = denom // self.plus_grand_diviseur_commun
+        self.__num = int(num / self.plus_grand_diviseur_commun)
+        self.__denom = int(denom / self.plus_grand_diviseur_commun)
 
 
 
@@ -140,4 +142,5 @@ class Fraction:
     
     def get_denom(self) -> int:
         return self.__denom
+
 
