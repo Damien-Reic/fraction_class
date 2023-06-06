@@ -1,5 +1,5 @@
 # fraction_class-python
 
-Classe fraction faite pour éviter les problèmes de précision avec les floats.
+Python class to manage float imprecision. 
 
-Pas de prérequis nécessaire au fonctionnement.
+There are still a lot of bugs and optimisation work to be done.
