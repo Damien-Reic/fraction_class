@@ -1,29 +1,17 @@
 class Fraction:
-    def __init__(self,num : int or float,denom : int or float = 1) -> 'Fraction':
+    """Fraction class to help with float impresision
+       !!! Be careful if you put float in an instance, it will not crash but it will round the float !!!
+    """
+    def __init__(self, num, denom = 1) -> 'Fraction':
         if denom < 0:
-            num,denom = -num,-denom         # s'assure que le négatif est toujours sur au numérateur 
-        is_almost_int = lambda x: int(x) == round(x,3)
-        if isinstance(num, float):          # fait en sorte de prendre en charge les floats
-            multiplicateur = 2
-            temp = num
-            while not is_almost_int(temp):
-                multiplicateur += 1
-                temp = num * multiplicateur
-            num = int(num * multiplicateur)
-            denom = denom * multiplicateur
+            num,denom = -num,-denom         
+        if isinstance(num, float): 
+            num = round(num)
         if isinstance(denom, float):
-            multiplicateur = 2
-            temp = denom
-            while not is_almost_int(temp):
-                multiplicateur += 1
-                temp = denom * multiplicateur
-            denom = int(denom * multiplicateur)
-            num = num * multiplicateur
-        self.plus_grand_diviseur_commun = Fraction.get_pgdc(num = num, denom = denom)          # permet de simplifier la fraction
+            denom = round(denom)
+        self.plus_grand_diviseur_commun = Fraction.get_pgdc(num = num, denom = denom)
         self.__num = int(num / self.plus_grand_diviseur_commun)
         self.__denom = int(denom / self.plus_grand_diviseur_commun)
-
-
 
     def __repr__(self) -> str:
         return f"Fraction({self.__num},{self.__denom})"
@@ -113,7 +101,7 @@ class Fraction:
     def get_pgdc(frac :'Fraction' = None, num : int = None, denom : int = None) -> int:
         if isinstance(num, int) and isinstance(denom, int):
             if num == 0 or denom == 0:
-                return num
+                return num if num > 0 else 1
             if num<0 or denom<0:
                 return Fraction.get_pgdc(num = abs(num),denom = abs(denom))
             if denom != 0:
@@ -142,5 +130,3 @@ class Fraction:
     
     def get_denom(self) -> int:
         return self.__denom
-
-
